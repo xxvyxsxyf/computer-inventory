@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Inventory</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ci-paper: #FAFBFC;
+            --ci-surface: #FFFFFF;
+            --ci-line: #E4E8ED;
+            --ci-line-strong: #D3D9E0;
+            --ci-ink: #1B222B;
+            --ci-muted: #6E7885;
+            --ci-faint: #9AA3AE;
+
+            --ci-accent: #2F6F5E;
+            --ci-accent-soft: #E7F0ED;
+            --ci-amber: #A9752F;
+            --ci-amber-soft: #F5EEE2;
+            --ci-red: #B14545;
+            --ci-red-soft: #F7EAEA;
+
+            --ci-font-display: 'Space Grotesk', sans-serif;
+            --ci-font-body: 'Inter', sans-serif;
+            --ci-font-mono: 'IBM Plex Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--ci-font-body);
+            background-color: var(--ci-paper);
+            background-image:
+                radial-gradient(circle, var(--ci-line) 1px, transparent 1px);
+            background-size: 28px 28px;
+            color: var(--ci-ink);
+            min-height: 100vh;
+        }
+
+        .ci-container {
+            width: 92%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 56px 0 80px;
+        }
+
+        /* ---------- Header ---------- */
+
+        .ci-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 24px;
+            margin-bottom: 32px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--ci-line-strong);
+        }
+
+        .ci-eyebrow {
+            font-family: var(--ci-font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--ci-accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .ci-eyebrow::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--ci-accent);
+        }
+
+        .ci-header h1 {
+            font-family: var(--ci-font-display);
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--ci-ink);
+            margin-bottom: 6px;
+        }
+
+        .ci-header p {
+            color: var(--ci-muted);
+            font-size: 14px;
+        }
+
+        .ci-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 18px;
+            border: 1px solid var(--ci-ink);
+            border-radius: 6px;
+            background-color: var(--ci-ink);
+            color: var(--ci-surface);
+            text-decoration: none;
+            font-family: var(--ci-font-body);
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .ci-btn:hover {
+            background-color: var(--ci-accent);
+            border-color: var(--ci-accent);
+        }
+
+        .ci-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ---------- Table card ---------- */
+
+        .ci-table-card {
+            background-color: var(--ci-surface);
+            border: 1px solid var(--ci-line);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(27, 34, 43, 0.04);
+        }
+
+        .ci-table-scroll {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            text-align: left;
+            font-family: var(--ci-font-mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ci-faint);
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--ci-line-strong);
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 15px 18px;
+            font-size: 14px;
+            color: var(--ci-ink);
+            border-bottom: 1px solid var(--ci-line);
+            white-space: nowrap;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr {
+            transition: background-color 0.12s ease;
+        }
+
+        tbody tr:hover {
+            background-color: var(--ci-paper);
+        }
+
+        .ci-id {
+            font-family: var(--ci-font-mono);
+            font-size: 13px;
+            color: var(--ci-faint);
+        }
+
+        .ci-asset-name {
+            font-weight: 600;
+        }
+
+        .ci-serial {
+            font-family: var(--ci-font-mono);
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            color: var(--ci-muted);
+        }
+
+        .ci-location {
+            color: var(--ci-muted);
+        }
+
+        /* ---------- Status ---------- */
+
+        .ci-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .ci-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .ci-status-dot--active { background-color: var(--ci-accent); box-shadow: 0 0 0 3px var(--ci-accent-soft); }
+        .ci-status-dot--repair { background-color: var(--ci-amber); box-shadow: 0 0 0 3px var(--ci-amber-soft); }
+        .ci-status-dot--inactive { background-color: var(--ci-faint); box-shadow: 0 0 0 3px var(--ci-line); }
+
+        /* ---------- Row actions ---------- */
+
+        .ci-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .ci-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-family: var(--ci-font-body);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.12s ease, border-color 0.12s ease;
+        }
+
+        .ci-action svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .ci-action--edit {
+            color: var(--ci-amber);
+        }
+
+        .ci-action--edit:hover {
+            background-color: var(--ci-amber-soft);
+            border-color: var(--ci-amber-soft);
+        }
+
+        .ci-action--delete {
+            color: var(--ci-red);
+        }
+
+        .ci-action--delete:hover {
+            background-color: var(--ci-red-soft);
+            border-color: var(--ci-red-soft);
+        }
+
+        /* ---------- Empty state ---------- */
+
+        .ci-empty {
+            padding: 72px 20px;
+            text-align: center;
+        }
+
+        .ci-empty svg {
+            width: 40px;
+            height: 40px;
+            color: var(--ci-faint);
+            margin-bottom: 16px;
+        }
+
+        .ci-empty p {
+            color: var(--ci-muted);
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .ci-empty a {
+            color: var(--ci-accent);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px solid var(--ci-accent-soft);
+        }
+
+        .ci-empty a:hover {
+            border-bottom-color: var(--ci-accent);
+        }
+
+        /* ---------- Responsive ---------- */
+
+        @media (max-width: 640px) {
+            .ci-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ci-container">
+
+        <header class="ci-header">
+            <div>
+                <div class="ci-eyebrow">Asset Registry</div>
+                <h1>Computer Inventory</h1>
+                <p>Manage and monitor computer equipment.</p>
+            </div>
+
+            <a href="/add" class="ci-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Computer
+            </a>
+        </header>
+
+        <main>
+            <div class="ci-table-card">
+                <div class="ci-table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Asset Name</th>
+                                <th>Serial Number</th>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>OS</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% if computers %}
+
+                                {% for computer in computers %}
+
+                                <tr>
+                                    <td class="ci-id">#{{ "%04d"|format(computer.id) if computer.id is number else computer.id }}</td>
+                                    <td class="ci-asset-name">{{ computer.asset_name }}</td>
+                                    <td class="ci-serial">{{ computer.serial_number }}</td>
+                                    <td>{{ computer.brand }}</td>
+                                    <td>{{ computer.model }}</td>
+                                    <td>{{ computer.os }}</td>
+                                    <td class="ci-location">{{ computer.location }}</td>
+
+                                    <td>
+                                        {% if computer.status in ['Active', 'active', 'In Use', 'In use'] %}
+                                            <span class="ci-status">
+                                                <span class="ci-status-dot ci-status-dot--active"></span>
+                                                {{ computer.status }}
+                                            </span>
+                                        {% elif computer.status in ['In Repair', 'Repair', 'Maintenance'] %}
+                                            <span class="ci-status">
+                                                <span class="ci-status-dot ci-status-dot--repair"></span>
+                                                {{ computer.status }}
+                                            </span>
+                                        {% elif computer.status in ['Retired', 'Inactive', 'Disposed', 'Lost'] %}
+                                            <span class="ci-status">
+                                                <span class="ci-status-dot ci-status-dot--inactive"></span>
+                                                {{ computer.status }}
+                                            </span>
+                                        {% else %}
+                                            <span class="ci-status">
+                                                <span class="ci-status-dot ci-status-dot--active"></span>
+                                                {{ computer.status }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <div class="ci-actions">
+                                            <a href="/edit/{{ computer.id }}" class="ci-action ci-action--edit">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
+                                                Edit
+                                            </a>
+
+                                            <a
+                                                href="/delete/{{ computer.id }}"
+                                                class="ci-action ci-action--delete"
+                                                onclick="return confirm('Are you sure you want to delete this computer?');"
+                                            >
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                                                Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                <tr>
+                                    <td colspan="9">
+                                        <div class="ci-empty">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="3" y="7" width="18" height="13" rx="2"/>
+                                                <path d="M3 7l2.5-4h13L21 7"/>
+                                                <line x1="9" y1="11" x2="15" y2="11"/>
+                                            </svg>
+                                            <p>No computer records found.</p>
+                                            <a href="/add">Add your first computer &rarr;</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            {% endif %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>

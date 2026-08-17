@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Computer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ci-paper: #FAFBFC;
+            --ci-surface: #FFFFFF;
+            --ci-line: #E4E8ED;
+            --ci-line-strong: #D3D9E0;
+            --ci-ink: #1B222B;
+            --ci-muted: #6E7885;
+            --ci-accent: #2F6F5E;
+            --ci-accent-soft: #E7F0ED;
+
+            --ci-font-display: 'Space Grotesk', sans-serif;
+            --ci-font-body: 'Inter', sans-serif;
+            --ci-font-mono: 'IBM Plex Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--ci-font-body);
+            background-color: var(--ci-paper);
+            background-image:
+                radial-gradient(circle, var(--ci-line) 1px, transparent 1px);
+            background-size: 28px 28px;
+            color: var(--ci-ink);
+            min-height: 100vh;
+        }
+
+        .ci-container {
+            width: 92%;
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 56px 0 80px;
+        }
+
+        .ci-header {
+            margin-bottom: 32px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--ci-line-strong);
+        }
+
+        .ci-eyebrow {
+            font-family: var(--ci-font-mono);
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--ci-accent);
+            margin-bottom: 12px;
+        }
+
+        .ci-header h1 {
+            font-family: var(--ci-font-display);
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .ci-header p {
+            color: var(--ci-muted);
+            font-size: 14px;
+        }
+
+        .ci-form-card {
+            background-color: var(--ci-surface);
+            border: 1px solid var(--ci-line);
+            border-radius: 10px;
+            padding: 28px;
+        }
+
+        .ci-form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid var(--ci-line-strong);
+            border-radius: 6px;
+            background-color: var(--ci-surface);
+            color: var(--ci-ink);
+            font-family: var(--ci-font-body);
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--ci-accent);
+            box-shadow: 0 0 0 3px var(--ci-accent-soft);
+        }
+
+        .ci-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ci-btn {
+            padding: 11px 18px;
+            border: 1px solid var(--ci-ink);
+            border-radius: 6px;
+            background-color: var(--ci-ink);
+            color: var(--ci-surface);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .ci-btn:hover {
+            background-color: var(--ci-accent);
+            border-color: var(--ci-accent);
+        }
+
+        .ci-btn--cancel {
+            background-color: var(--ci-surface);
+            color: var(--ci-ink);
+            border-color: var(--ci-line-strong);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ci-container">
+
+        <header class="ci-header">
+            <div class="ci-eyebrow">Asset Registry</div>
+            <h1>Edit Computer</h1>
+            <p>Update computer information.</p>
+        </header>
+
+        <main>
+
+            <div class="ci-form-card">
+
+                <form action="/edit/{{ computer.id }}" method="POST">
+
+                    <div class="ci-form-group">
+                        <label for="asset_name">Asset Name</label>
+
+                        <input
+                            type="text"
+                            id="asset_name"
+                            name="asset_name"
+                            value="{{ computer.asset_name }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="ci-form-group">
+                        <label for="serial_number">Serial Number</label>
+
+                        <input
+                            type="text"
+                            id="serial_number"
+                            name="serial_number"
+                            value="{{ computer.serial_number }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="ci-form-group">
+                        <label for="brand">Brand</label>
+
+                        <input
+                            type="text"
+                            id="brand"
+                            name="brand"
+                            value="{{ computer.brand }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="ci-form-group">
+                        <label for="model">Model</label>
+
+                        <input
+                            type="text"
+                            id="model"
+                            name="model"
+                            value="{{ computer.model }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="ci-form-group">
+                        <label for="os">Operating System</label>
+
+                        <input
+                            type="text"
+                            id="os"
+                            name="os"
+                            value="{{ computer.os }}"
+                        >
+                    </div>
+
+                    <div class="ci-form-group">
+                        <label for="location">Location</label>
+
+                        <input
+                            type="text"
+                            id="location"
+                            name="location"
+                            value="{{ computer.location }}"
+                        >
+                    </div>
+
+                    <div class="ci-form-group">
+                        <label for="status">Status</label>
+
+                        <select id="status" name="status" required>
+
+                            <option
+                                value="Active"
+                                {% if computer.status == "Active" %}selected{% endif %}
+                            >
+                                Active
+                            </option>
+
+                            <option
+                                value="In Repair"
+                                {% if computer.status == "In Repair" %}selected{% endif %}
+                            >
+                                In Repair
+                            </option>
+
+                            <option
+                                value="Inactive"
+                                {% if computer.status == "Inactive" %}selected{% endif %}
+                            >
+                                Inactive
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div class="ci-actions">
+
+                        <button type="submit" class="ci-btn">
+                            Save Changes
+                        </button>
+
+                        <a href="/" class="ci-btn ci-btn--cancel">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+</html>
